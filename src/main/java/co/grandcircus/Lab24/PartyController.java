@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +23,9 @@ public class PartyController {
 	@Autowired
 	private PartyOptionRepo dao2;
 	
+	@Autowired
+	private RSVPRepo rsvpDao;
+	
 	@RequestMapping("/")
 	public String index() {
 		
@@ -32,8 +36,15 @@ public class PartyController {
 	public String listParty(Model model) {
 		List<Party> party=dao1.findAll();
 		model.addAttribute("party",party);
+		
 		return "home";
 		
+	}
+	
+	@RequestMapping("/save-rsvp")
+	public String submitRSVP(RSVP rsvp) {
+		  rsvpDao.save(rsvp);
+		  return "redirect:/party";
 	}
 	
 	@RequestMapping("search-name")
@@ -111,6 +122,13 @@ public class PartyController {
 		dao1.save(party);
 		return "redirect:/admin-page?id="+id;
 		
-		
 	}
+	
+	@RequestMapping("/{id}")
+	public String showRSVP(Model model,@PathVariable("id") Party party)
+	{
+		model.addAttribute("party",party);
+		return "rsvp-show";
+	}
+	
 }

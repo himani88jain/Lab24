@@ -2,6 +2,7 @@
     pageEncoding="ISO-8859-1"%>
    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix = "fn" %>
    
 <!DOCTYPE html>
 <html>
@@ -26,10 +27,31 @@
      	     <ul>
  			<c:forEach var="partytype" items ="${party}" >
  				<li><c:out value="${partytype.name}"/> -
- 				<c:out value="${partytype.date}"/></li>
+ 				<c:out value="${partytype.date}"/>
+ 				<a href="<c:url value="${partytype.id}"/>">See Details</a><br>
+ 				<p>RSVPs: ${fn:length(partytype.rsvps)}</p>
+ 				</li>
  			</c:forEach>
      
      </ul>
+     <br>
+     <h1>RSVP</h1>
+     <form action="/save-rsvp">
+     <label>Party</label>
+     	<select name="party">
+     	<c:forEach var="party" items ="${party}">
+     	<option value="${party.id}">
+     	<c:out value="${party.name}"/>
+     	</option>
+     	</c:forEach>
+     	</select><br><br>
+     	<label>Attendee</label>
+     	<input type="text" name="attendee"/><br><br>
+     	<label>Comment</label>
+     	<textarea name="comment" rows="4" cols="30">
+     	</textarea>
+     	<button type="submit">Submit</button>
+     </form>
      
      
        </div>
